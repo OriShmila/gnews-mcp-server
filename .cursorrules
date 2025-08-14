@@ -1,0 +1,229 @@
+# GNews MCP Server Rules
+
+## 🎯 Purpose
+This document provides implementation guidelines and rules for the GNews MCP (Model Context Protocol) server. This server provides access to Google News through the GNews.io API.
+
+## 📦 Project Structure
+
+```
+gnews-mcp-server/
+├── gnews_mcp_server/          # Main package
+│   ├── __init__.py           # Package initialization
+│   ├── __main__.py          # Entry point
+│   ├── server.py            # MCP server implementation
+│   ├── handlers.py          # Tool function implementations
+│   └── tools.json           # Tool schema definitions
+├── main.py                  # Test compatibility wrapper
+├── test_server.py          # Comprehensive test suite
+├── test_cases.json         # Test case definitions
+└── pyproject.toml          # Project configuration
+```
+
+## 🔧 Core Components
+
+### 1. Schema Definition (`gnews_mcp_server/tools.json`)
+
+Contains two tools with LLM-friendly parameter names:
+
+**Tools:**
+- `search_news`: Search for news articles using keywords
+- `get_top_headlines`: Get trending news headlines
+
+**Key Features:**
+- Uses `language` instead of `lang` for clarity
+- Uses `start_date`/`end_date` with YYYY-MM-DD format instead of ISO dates
+- Enum values for supported countries and languages
+- Fixed article count (10 articles) - no `max` parameter
+- No paid subscription parameters (`page`, `expand`, `nullable`)
+
+### 2. Tool Implementation (`gnews_mcp_server/handlers.py`)
+
+**Functions:**
+- `search_news()`: Implements keyword-based news search
+- `get_top_headlines()`: Implements category-based headlines
+- `validate_and_convert_date()`: Converts YYYY-MM-DD to ISO format for API
+- `make_gnews_request()`: Handles API requests with error handling
+
+**Key Implementation Details:**
+- Always returns exactly 10 articles (hardcoded)
+- Converts simple date format to ISO format internally
+- Validates enum values for language and country
+- Proper async/await patterns
+- Comprehensive error handling
+
+### 3. Server Configuration (`gnews_mcp_server/server.py`)
+
+- Server name: "GNewsAPI"
+- Version: "0.1.0"
+- Loads tool schemas from JSON file
+- Implements MCP protocol handlers
+
+## 🌐 API Integration
+
+**GNews API:**
+- Base URL: `https://gnews.io/api/v4`
+- Requires `GNEWS_KEY` environment variable
+- Endpoints: `/search` and `/top-headlines`
+
+**Environment Variables:**
+- `GNEWS_KEY`: Required API key from gnews.io
+
+## 📋 Schema Rules
+
+### ✅ DO:
+1. **Use LLM-friendly parameter names**:
+   - `language` not `lang`
+   - `start_date`/`end_date` not `from`/`to`
+   - Clear, descriptive names
+
+2. **Use enum values for validation**:
+   - Countries: au, br, ca, cn, eg, fr, de, gr, hk, in, ie, it, jp, nl, no, pk, pe, ph, pt, ro, ru, sg, se, ch, tw, ua, gb, us
+   - Languages: ar, zh, nl, en, fr, de, el, hi, it, ja, ml, mr, no, pt, ro, ru, es, sv, ta, te, uk
+
+3. **Simplify date handling**:
+   - Accept YYYY-MM-DD format from users
+   - Convert to ISO internally for API
+
+4. **Fixed response size**:
+   - Always return 10 articles
+   - Remove complexity of pagination
+
+### ❌ DON'T:
+1. **Expose API complexity to users**:
+   - No ISO date formats in user interface
+   - No pagination parameters
+   - No null handling parameters
+
+2. **Include paid features**:
+   - No `page` parameter
+   - No `expand` parameter  
+   - No full content access
+
+## 🧪 Testing
+
+**Test Coverage:**
+- 23 test cases covering both tools
+- Success and failure scenarios
+- Input validation testing
+- Schema validation
+- Real API integration tests
+
+**Key Test Files:**
+- `test_server.py`: Test framework
+- `test_cases.json`: Test case definitions
+
+## 🔍 Input Validation
+
+**Required Validations:**
+1. **search_news**:
+   - `q` parameter is required and non-empty
+   - `language` must be from supported enum
+   - `country` must be from supported enum  
+   - `sortby` must be "publishedAt" or "relevance"
+   - Date format must be YYYY-MM-DD
+
+2. **get_top_headlines**:
+   - `category` must be from supported enum
+   - `language` must be from supported enum
+   - `country` must be from supported enum
+   - Date format must be YYYY-MM-DD
+
+## 📊 Response Format
+
+Both tools return:
+```json
+{
+  "totalArticles": 10,
+  "articles": [
+    {
+      "title": "string",
+      "description": "string|null", 
+      "content": "string|null",
+      "url": "string",
+      "image": "string|null",
+      "publishedAt": "string (ISO 8601)",
+      "source": {
+        "name": "string",
+        "url": "string"
+      }
+    }
+  ]
+}
+```
+
+## 🚀 Development Workflow
+
+1. **Making Changes:**
+   - Update `tools.json` for schema changes
+   - Update `handlers.py` for implementation changes
+   - Update `test_cases.json` for new test scenarios
+   - Run tests with `uv run python test_server.py`
+
+2. **Adding New Tools:**
+   - Add schema to `tools.json`
+   - Implement function in `handlers.py` 
+   - Add to `TOOL_FUNCTIONS` mapping
+   - Create test cases in `test_cases.json`
+
+3. **Error Handling:**
+   - Always validate inputs
+   - Return meaningful error messages
+   - Handle API errors gracefully
+   - Include proper async/await patterns
+
+## 📝 MCP Client Configuration
+
+### Claude Desktop
+```json
+{
+  "mcpServers": {
+    "gnews": {
+      "command": "uvx",
+      "args": [
+        "--from", 
+        "git+https://github.com/yourusername/gnews-mcp-server",
+        "gnews-mcp-server"
+      ],
+      "env": {
+        "GNEWS_KEY": "your_api_key_here"
+      }
+    }
+  }
+}
+```
+
+## 🔧 Common Operations
+
+**Run Tests:**
+```bash
+uv run python test_server.py
+```
+
+**Run Server:**
+```bash
+uv run python main.py
+```
+
+**Install Dependencies:**
+```bash
+uv sync
+```
+
+**Build Package:**
+```bash
+uv build
+```
+
+## 📚 Dependencies
+
+**Core:**
+- `mcp>=1.6.0`: MCP protocol implementation
+- `httpx`: Async HTTP client for API requests
+- `python-dotenv`: Environment variable management
+
+**Development:**
+- `uv`: Package manager and build tool
+
+---
+
+**Remember:** This server prioritizes simplicity and LLM-friendliness over exposing every API feature. Keep the interface clean and intuitive for AI assistants to use effectively.

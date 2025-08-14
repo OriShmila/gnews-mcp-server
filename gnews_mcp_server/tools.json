@@ -1,0 +1,321 @@
+{
+  "name": "GNewsAPI",
+  "tools": [
+    {
+      "name": "search_news",
+      "description": "Search for news articles using keywords with various filtering options including language, country, date range, and sorting.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "q": {
+            "type": "string",
+            "description": "Search keywords to find relevant news articles. Supports logical operators (AND, OR, NOT) and phrase search with quotes.",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "language": {
+            "type": "string",
+            "description": "2-letter language code to filter articles (e.g., 'en' for English, 'fr' for French)",
+            "enum": [
+              "ar",
+              "zh",
+              "nl",
+              "en",
+              "fr",
+              "de",
+              "el",
+              "hi",
+              "it",
+              "ja",
+              "ml",
+              "mr",
+              "no",
+              "pt",
+              "ro",
+              "ru",
+              "es",
+              "sv",
+              "ta",
+              "te",
+              "uk"
+            ],
+            "default": "en"
+          },
+          "country": {
+            "type": "string",
+            "description": "2-letter country code to filter articles by publication country (e.g., 'us', 'gb', 'ca')",
+            "enum": [
+              "au",
+              "br",
+              "ca",
+              "cn",
+              "eg",
+              "fr",
+              "de",
+              "gr",
+              "hk",
+              "in",
+              "ie",
+              "it",
+              "jp",
+              "nl",
+              "no",
+              "pk",
+              "pe",
+              "ph",
+              "pt",
+              "ro",
+              "ru",
+              "sg",
+              "se",
+              "ch",
+              "tw",
+              "ua",
+              "gb",
+              "us"
+            ]
+          },
+
+          "in": {
+            "type": "string",
+            "description": "Attributes to search in: 'title', 'description', 'content', or comma-separated combinations",
+            "default": "title,description"
+          },
+          "start_date": {
+            "type": "string",
+            "description": "Filter articles published after this date (format: YYYY-MM-DD)",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "end_date": {
+            "type": "string",
+            "description": "Filter articles published before this date (format: YYYY-MM-DD)",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "sortby": {
+            "type": "string",
+            "description": "Sort articles by publication date or relevance",
+            "enum": ["publishedAt", "relevance"],
+            "default": "publishedAt"
+          }
+        },
+        "required": ["q"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "description": "Search results containing news articles",
+        "properties": {
+          "totalArticles": {
+            "type": "integer",
+            "description": "Total number of articles found"
+          },
+          "articles": {
+            "type": "array",
+            "description": "Array of news articles",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "description": "Article headline"
+                },
+                "description": {
+                  "type": ["string", "null"],
+                  "description": "Article summary/description"
+                },
+                "content": {
+                  "type": ["string", "null"],
+                  "description": "Full article content (if available)"
+                },
+                "url": {
+                  "type": "string",
+                  "description": "URL to the original article"
+                },
+                "image": {
+                  "type": ["string", "null"],
+                  "description": "URL to article image"
+                },
+                "publishedAt": {
+                  "type": "string",
+                  "description": "Publication date in ISO 8601 format"
+                },
+                "source": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "News source name"
+                    },
+                    "url": {
+                      "type": "string",
+                      "description": "News source website URL"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "get_top_headlines",
+      "description": "Get current trending news headlines based on Google News ranking with filtering by category, language, and country.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "description": "News category to filter by",
+            "enum": [
+              "general",
+              "world",
+              "nation",
+              "business",
+              "technology",
+              "entertainment",
+              "sports",
+              "science",
+              "health"
+            ],
+            "default": "general"
+          },
+          "language": {
+            "type": "string",
+            "description": "2-letter language code to filter articles (e.g., 'en' for English, 'fr' for French)",
+            "enum": [
+              "ar",
+              "zh",
+              "nl",
+              "en",
+              "fr",
+              "de",
+              "el",
+              "hi",
+              "it",
+              "ja",
+              "ml",
+              "mr",
+              "no",
+              "pt",
+              "ro",
+              "ru",
+              "es",
+              "sv",
+              "ta",
+              "te",
+              "uk"
+            ],
+            "default": "en"
+          },
+          "country": {
+            "type": "string",
+            "description": "2-letter country code to filter articles by publication country (e.g., 'us', 'gb', 'ca')",
+            "enum": [
+              "au",
+              "br",
+              "ca",
+              "cn",
+              "eg",
+              "fr",
+              "de",
+              "gr",
+              "hk",
+              "in",
+              "ie",
+              "it",
+              "jp",
+              "nl",
+              "no",
+              "pk",
+              "pe",
+              "ph",
+              "pt",
+              "ro",
+              "ru",
+              "sg",
+              "se",
+              "ch",
+              "tw",
+              "ua",
+              "gb",
+              "us"
+            ]
+          },
+
+          "start_date": {
+            "type": "string",
+            "description": "Filter articles published after this date (format: YYYY-MM-DD)",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "end_date": {
+            "type": "string",
+            "description": "Filter articles published before this date (format: YYYY-MM-DD)",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "q": {
+            "type": "string",
+            "description": "Search keywords to find relevant articles within the headlines",
+            "maxLength": 500
+          }
+        },
+        "required": []
+      },
+      "outputSchema": {
+        "type": "object",
+        "description": "Top headlines response containing trending news articles",
+        "properties": {
+          "totalArticles": {
+            "type": "integer",
+            "description": "Total number of articles found"
+          },
+          "articles": {
+            "type": "array",
+            "description": "Array of news articles",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "description": "Article headline"
+                },
+                "description": {
+                  "type": ["string", "null"],
+                  "description": "Article summary/description"
+                },
+                "content": {
+                  "type": ["string", "null"],
+                  "description": "Full article content (if available)"
+                },
+                "url": {
+                  "type": "string",
+                  "description": "URL to the original article"
+                },
+                "image": {
+                  "type": ["string", "null"],
+                  "description": "URL to article image"
+                },
+                "publishedAt": {
+                  "type": "string",
+                  "description": "Publication date in ISO 8601 format"
+                },
+                "source": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "News source name"
+                    },
+                    "url": {
+                      "type": "string",
+                      "description": "News source website URL"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
