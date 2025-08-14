@@ -85,12 +85,12 @@ async def make_gnews_request(endpoint: str, params: dict) -> dict:
             raise ValueError(f"Unexpected error: {e}")
 
 
-async def search_news(q: str, **kwargs) -> dict:
+async def search_news(query: str, **kwargs) -> dict:
     """
     Search for news articles using keywords with various filtering options.
 
     Args:
-        q: Search keywords (required)
+        query: Search keywords (required)
         language: 2-letter language code (default: 'en')
         country: 2-letter country code
 
@@ -112,8 +112,8 @@ async def search_news(q: str, **kwargs) -> dict:
     sortby = kwargs.get("sortby", "publishedAt")
 
     # Validate required parameters
-    if not q or not q.strip():
-        raise ValueError("Search query 'q' is required and cannot be empty")
+    if not query or not query.strip():
+        raise ValueError("Search query 'query' is required and cannot be empty")
 
     # Validate and convert date formats if provided
     api_start_date = None
@@ -137,7 +137,7 @@ async def search_news(q: str, **kwargs) -> dict:
 
     # Build request parameters
     params = {
-        "q": q.strip(),
+        "q": query.strip(),
         "lang": language.lower(),  # API still expects 'lang' parameter
         "max": max_articles,
         "in": in_attr,
@@ -169,7 +169,7 @@ async def get_top_headlines(**kwargs) -> dict:
 
         start_date: Filter articles published after this date (YYYY-MM-DD)
         end_date: Filter articles published before this date (YYYY-MM-DD)
-        q: Search keywords within headlines
+        query: Search keywords within headlines
 
     Returns:
         Dict containing totalArticles and articles array
@@ -181,7 +181,7 @@ async def get_top_headlines(**kwargs) -> dict:
     max_articles = 10  # Fixed at 10 articles
     start_date = kwargs.get("start_date")
     end_date = kwargs.get("end_date")
-    q = kwargs.get("q")
+    query = kwargs.get("query")
 
     # Validate category
     valid_categories = [
@@ -228,8 +228,8 @@ async def get_top_headlines(**kwargs) -> dict:
         params["from"] = api_start_date  # API still expects 'from' parameter
     if api_end_date:
         params["to"] = api_end_date  # API still expects 'to' parameter
-    if q:
-        params["q"] = q.strip()
+    if query:
+        params["q"] = query.strip()
 
     # Make API request
     response = await make_gnews_request("top-headlines", params)

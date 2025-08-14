@@ -69,7 +69,7 @@ uvx --from git+https://github.com/yourusername/gnews-mcp-server gnews-server
 Search for news articles using keywords with various filtering options.
 
 **Parameters:**
-- `q` (required): Search keywords (supports logical operators AND, OR, NOT)
+- `query` (required): Search keywords (supports logical operators AND, OR, NOT)
 - `language`: 2-letter language code (default: "en") - supported values: ar, zh, nl, en, fr, de, el, hi, it, ja, ml, mr, no, pt, ro, ru, es, sv, ta, te, uk
 - `country`: 2-letter country code - supported values: au, br, ca, cn, eg, fr, de, gr, hk, in, ie, it, jp, nl, no, pk, pe, ph, pt, ro, ru, sg, se, ch, tw, ua, gb, us
 - `in`: Search in "title", "description", "content" (default: "title,description")
@@ -82,7 +82,7 @@ Returns exactly 10 articles.
 **Example:**
 ```json
 {
-  "q": "artificial intelligence",
+  "query": "artificial intelligence",
   "language": "en",
   "country": "us",
   "sortby": "relevance",
@@ -99,7 +99,7 @@ Get current trending headlines based on Google News ranking.
 - `category`: Category ("general", "world", "nation", "business", "technology", "entertainment", "sports", "science", "health") - default: "general"
 - `language`: 2-letter language code (default: "en") - supported values: ar, zh, nl, en, fr, de, el, hi, it, ja, ml, mr, no, pt, ro, ru, es, sv, ta, te, uk
 - `country`: 2-letter country code - supported values: au, br, ca, cn, eg, fr, de, gr, hk, in, ie, it, jp, nl, no, pk, pe, ph, pt, ro, ru, sg, se, ch, tw, ua, gb, us
-- `q`: Search keywords within headlines
+- `query`: Search keywords within headlines
 - `start_date`: Start date in YYYY-MM-DD format
 - `end_date`: End date in YYYY-MM-DD format
 
@@ -144,7 +144,7 @@ The server communicates using the standard MCP protocol over stdio. Refer to you
 
 ## Query Syntax
 
-The GNews API supports advanced query syntax for the `q` parameter:
+The GNews API supports advanced query syntax for the `query` parameter:
 
 ### Phrase Search
 - `"Apple iPhone"` - Exact phrase matching

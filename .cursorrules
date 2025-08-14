@@ -116,7 +116,7 @@ Contains two tools with LLM-friendly parameter names:
 
 **Required Validations:**
 1. **search_news**:
-   - `q` parameter is required and non-empty
+   - `query` parameter is required and non-empty
    - `language` must be from supported enum
    - `country` must be from supported enum  
    - `sortby` must be "publishedAt" or "relevance"

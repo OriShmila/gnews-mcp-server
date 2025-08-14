@@ -4,7 +4,7 @@
       "name": "search_news_basic",
       "tool": "search_news",
       "arguments": {
-        "q": "artificial intelligence"
+        "query": "artificial intelligence"
       },
       "description": "Basic news search with simple query",
       "expected_fields": ["totalArticles", "articles"],
@@ -14,7 +14,7 @@
       "name": "search_news_with_language",
       "tool": "search_news",
       "arguments": {
-        "q": "technology",
+        "query": "technology",
         "language": "en"
       },
       "description": "Search news with language filter",
@@ -25,7 +25,7 @@
       "name": "search_news_with_country",
       "tool": "search_news",
       "arguments": {
-        "q": "politics",
+        "query": "politics",
         "language": "en",
         "country": "us"
       },
@@ -37,7 +37,7 @@
       "name": "search_news_with_sorting",
       "tool": "search_news",
       "arguments": {
-        "q": "climate change",
+        "query": "climate change",
         "sortby": "relevance"
       },
       "description": "Search news sorted by relevance",
@@ -48,7 +48,7 @@
       "name": "search_news_with_date_range",
       "tool": "search_news",
       "arguments": {
-        "q": "sports",
+        "query": "sports",
         "start_date": "2024-01-01",
         "end_date": "2024-12-31"
       },
@@ -60,7 +60,7 @@
       "name": "search_news_phrase_query",
       "tool": "search_news",
       "arguments": {
-        "q": "\"machine learning\""
+        "query": "\"machine learning\""
       },
       "description": "Search with exact phrase matching",
       "expected_fields": ["totalArticles", "articles"],
@@ -70,7 +70,7 @@
       "name": "search_news_logical_operators",
       "tool": "search_news",
       "arguments": {
-        "q": "Apple AND iPhone OR Android"
+        "query": "Apple AND iPhone OR Android"
       },
       "description": "Search using logical AND/OR operators",
       "expected_fields": ["totalArticles", "articles"],
@@ -133,7 +133,7 @@
       "tool": "get_top_headlines",
       "arguments": {
         "category": "general",
-        "q": "weather"
+        "query": "weather"
       },
       "description": "Get general headlines filtered by search term",
       "expected_fields": ["totalArticles", "articles"],
@@ -143,7 +143,7 @@
       "name": "search_news_empty_query",
       "tool": "search_news",
       "arguments": {
-        "q": ""
+        "query": ""
       },
       "description": "Test search with empty query",
       "expected_fields": [],
@@ -153,7 +153,7 @@
       "name": "search_news_whitespace_query",
       "tool": "search_news",
       "arguments": {
-        "q": "   "
+        "query": "   "
       },
       "description": "Test search with whitespace-only query",
       "expected_fields": [],
@@ -163,7 +163,7 @@
       "name": "search_news_invalid_lang",
       "tool": "search_news",
       "arguments": {
-        "q": "news",
+        "query": "news",
         "language": "english"
       },
       "description": "Test search with invalid language code format",
@@ -174,7 +174,7 @@
       "name": "search_news_invalid_country",
       "tool": "search_news",
       "arguments": {
-        "q": "news",
+        "query": "news",
         "country": "usa"
       },
       "description": "Test search with invalid country code format",
@@ -185,7 +185,7 @@
       "name": "search_news_invalid_sortby",
       "tool": "search_news",
       "arguments": {
-        "q": "news",
+        "query": "news",
         "sortby": "popularity"
       },
       "description": "Test search with invalid sortby value",
@@ -196,7 +196,7 @@
       "name": "search_news_invalid_date_format",
       "tool": "search_news",
       "arguments": {
-        "q": "news",
+        "query": "news",
         "start_date": "invalid-date-format"
       },
       "description": "Test search with invalid date format",
