@@ -14,6 +14,7 @@ from gnews_mcp_server.handlers import (
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger("GNewsAPI")
+logging.getLogger("httpx").setLevel(logging.WARNING)
 
 
 def _package_path(filename: str) -> str:

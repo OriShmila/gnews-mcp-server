@@ -10,6 +10,9 @@ import time
 from typing import Dict, List, Any
 import jsonschema
 from jsonschema import ValidationError
+import logging
+
+logging.getLogger("httpx").setLevel(logging.WARNING)
 
 
 class TestResults:
