@@ -72,7 +72,6 @@ async def handle_call_tool(name: str, arguments: dict[str, Any] | None) -> Any:
     try:
         tool_function = TOOL_FUNCTIONS[name]
         result = await tool_function(**arguments)
-        print(3333, result)
         return result
     except Exception as e:
         logger.error(f"Error calling tool {name}: {e}")
