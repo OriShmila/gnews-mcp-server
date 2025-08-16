@@ -1,5 +1,5 @@
 {
-  "name": "GNewsAPI",
+  "name": "GNews",
   "tools": [
     {
       "name": "search_news",
