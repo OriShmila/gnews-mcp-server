@@ -98,7 +98,15 @@
             "default": "publishedAt"
           }
         },
-        "required": ["query"]
+        "required": [
+          "query",
+          "language",
+          "country",
+          "in",
+          "start_date",
+          "end_date",
+          "sortby"
+        ]
       },
       "outputSchema": {
         "type": "object",
@@ -151,10 +159,20 @@
                     }
                   }
                 }
-              }
+              },
+              "required": [
+                "title",
+                "description",
+                "content",
+                "url",
+                "image",
+                "publishedAt",
+                "source"
+              ]
             }
           }
-        }
+        },
+        "required": ["totalArticles", "articles"]
       }
     },
     {
@@ -258,7 +276,14 @@
             "maxLength": 500
           }
         },
-        "required": []
+        "required": [
+          "category",
+          "language",
+          "country",
+          "start_date",
+          "end_date",
+          "query"
+        ]
       },
       "outputSchema": {
         "type": "object",
@@ -311,9 +336,19 @@
                     }
                   }
                 }
-              }
+              },
+              "required": [
+                "title",
+                "description",
+                "content",
+                "url",
+                "image",
+                "publishedAt",
+                "source"
+              ]
             }
-          }
+          },
+          "required": ["totalArticles", "articles"]
         }
       }
     }
