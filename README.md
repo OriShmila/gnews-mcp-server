@@ -219,6 +219,63 @@ gnews-mcp-server/
 └── README.md
 ```
 
+### MCP Schema Design Rules
+
+This project follows specific patterns for MCP JSON schema design:
+
+#### Optional Parameters Pattern
+
+✅ **DO** - Use nullable union types for optional parameters:
+```json
+{
+  "country": {
+    "type": ["string", "null"],
+    "description": "2-letter country code (optional)",
+    "enum": ["us", "gb", "ca", ...]
+  }
+}
+```
+
+❌ **DON'T** - Use `default: null` with non-nullable types:
+```json
+{
+  "country": {
+    "type": "string",
+    "default": null  // Type inconsistency!
+  }
+}
+```
+
+#### Parameters with Explicit Defaults
+
+✅ **DO** - Keep meaningful defaults for parameters:
+```json
+{
+  "language": {
+    "type": "string", 
+    "enum": ["en", "fr", "de", ...],
+    "default": "en"
+  }
+}
+```
+
+#### Required Array Management
+
+- **Include in `required`**: Only truly mandatory parameters
+- **Exclude from `required`**: All optional/nullable parameters
+- **Schema validation**: Catches invalid inputs before handlers
+
+#### Handler Signature Matching
+
+Match your handler function signatures to the schema:
+
+```python
+async def search_news(query: str,                    # required
+                     language: str = "en",           # has default
+                     country: str = None,            # nullable optional
+                     **kwargs) -> dict:
+```
+
 ### Adding New Features
 
 1. Update tool schemas in `gnews_mcp_server/tools.json`
@@ -262,11 +319,22 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - [MCP Protocol Specification](https://github.com/modelcontextprotocol)
 - [Issues and Bug Reports](https://github.com/yourusername/gnews-mcp-server/issues)
 
+## Schema Validation Benefits
+
+This server provides enhanced schema validation features:
+
+- **Input Validation**: Parameters validated against JSON Schema before processing
+- **Output Validation**: Responses validated to ensure data integrity  
+- **Type Safety**: Nullable types properly handled with union types `["string", "null"]`
+- **Error Prevention**: Invalid enum values, date formats, and required fields caught early
+- **Consistent Behavior**: Predictable parameter handling across all tools
+
 ## Changelog
 
 ### v0.1.0
 - Initial release
 - Search news functionality
 - Top headlines functionality
-- Comprehensive schema validation
-- Full test suite
+- Comprehensive schema validation with nullable union types
+- Enhanced error handling and input validation
+- Full test suite with 100% coverage

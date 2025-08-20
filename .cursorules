@@ -1,0 +1,73 @@
+# GNews MCP Server - Cursor IDE Rules
+
+## 🎯 MCP Schema Rules
+
+### Optional Parameters Pattern
+**RULE**: For optional parameters in MCP server JSON schemas:
+
+✅ **DO:**
+```json
+{
+  "parameter_name": {
+    "type": ["string", "null"],
+    "description": "Parameter description"
+  }
+}
+```
+- Use `"type": ["string", "null"]` for nullable optional parameters
+- Do NOT include in `"required"` array
+- Let MCP system handle null values naturally
+
+❌ **DON'T:**
+```json
+{
+  "parameter_name": {
+    "type": "string", 
+    "default": null
+  }
+}
+```
+- Avoid `"default": null` with non-nullable types
+- This creates type inconsistencies
+
+### Parameters with Defaults
+**RULE**: Parameters with explicit non-null defaults:
+
+✅ **DO:**
+```json
+{
+  "language": {
+    "type": "string",
+    "enum": ["en", "fr", "de", ...],
+    "default": "en"
+  }
+}
+```
+- Keep explicit defaults for parameters with meaningful default values
+- Can include in `"required"` array or leave optional based on design
+
+### Handler Implementation
+**RULE**: Match handler signatures to schema:
+
+```python
+async def tool_function(required_param: str, 
+                       optional_with_default: str = "default_value",
+                       optional_nullable: str = None, 
+                       **kwargs) -> dict:
+```
+
+### Schema Validation Benefits
+- Input validation catches errors before handlers
+- Consistent null handling across tools
+- Clear parameter expectations for MCP clients
+- Better error messages for invalid inputs
+
+## 🧪 Testing
+- Always run full test suite after schema changes: `uv run python test_server.py`
+- Test both valid and invalid parameter combinations
+- Verify schema validation catches expected errors
+
+## 📝 Documentation
+- Update README.md when changing parameter patterns
+- Document any breaking changes in schema structure
+- Keep tool schemas synchronized with implementation

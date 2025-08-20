@@ -98,9 +98,7 @@
             "default": "publishedAt"
           }
         },
-        "required": [
-          "query"
-        ]
+        "required": ["query"]
       },
       "outputSchema": {
         "type": "object",
