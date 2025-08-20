@@ -85,30 +85,28 @@ async def make_gnews_request(endpoint: str, params: dict) -> dict:
             raise ValueError(f"Unexpected error: {e}")
 
 
-async def search_news(query: str, **kwargs) -> dict:
+async def search_news(query: str, language: str = "en", country: str = None, 
+                     **kwargs) -> dict:
     """
     Search for news articles using keywords with various filtering options.
 
     Args:
         query: Search keywords (required)
         language: 2-letter language code (default: 'en')
-        country: 2-letter country code
-
+        country: 2-letter country code (nullable)
         in: Attributes to search in (default: 'title,description')
-        start_date: Filter articles published after this date (YYYY-MM-DD)
-        end_date: Filter articles published before this date (YYYY-MM-DD)
+        start_date: Filter articles published after this date (YYYY-MM-DD, nullable)
+        end_date: Filter articles published before this date (YYYY-MM-DD, nullable)
         sortby: Sort by 'publishedAt' or 'relevance' (default: 'publishedAt')
 
     Returns:
         Dict containing totalArticles and articles array
     """
-    # Extract parameters with defaults
-    language = kwargs.get("language", "en")
-    country = kwargs.get("country")
+    # Extract parameters with defaults and handle nulls
     max_articles = 10  # Fixed at 10 articles
     in_attr = kwargs.get("in", "title,description")
-    start_date = kwargs.get("start_date")
-    end_date = kwargs.get("end_date")
+    start_date = kwargs.get("start_date") if kwargs.get("start_date") is not None else None
+    end_date = kwargs.get("end_date") if kwargs.get("end_date") is not None else None
     sortby = kwargs.get("sortby", "publishedAt")
 
     # Validate required parameters
@@ -158,30 +156,25 @@ async def search_news(query: str, **kwargs) -> dict:
     return response
 
 
-async def get_top_headlines(**kwargs) -> dict:
+async def get_top_headlines(category: str = "general", language: str = "en",
+                           country: str = None, start_date: str = None,
+                           end_date: str = None, query: str = None, **kwargs) -> dict:
     """
     Get current trending news headlines based on Google News ranking.
 
     Args:
         category: News category (default: 'general')
         language: 2-letter language code (default: 'en')
-        country: 2-letter country code
-
-        start_date: Filter articles published after this date (YYYY-MM-DD)
-        end_date: Filter articles published before this date (YYYY-MM-DD)
-        query: Search keywords within headlines
+        country: 2-letter country code (nullable)
+        start_date: Filter articles published after this date (YYYY-MM-DD, nullable)
+        end_date: Filter articles published before this date (YYYY-MM-DD, nullable)
+        query: Search keywords within headlines (nullable)
 
     Returns:
         Dict containing totalArticles and articles array
     """
-    # Extract parameters with defaults
-    category = kwargs.get("category", "general")
-    language = kwargs.get("language", "en")
-    country = kwargs.get("country")
+    # Extract parameters with fixed articles count
     max_articles = 10  # Fixed at 10 articles
-    start_date = kwargs.get("start_date")
-    end_date = kwargs.get("end_date")
-    query = kwargs.get("query")
 
     # Validate category
     valid_categories = [
