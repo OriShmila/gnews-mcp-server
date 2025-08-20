@@ -42,7 +42,7 @@
             "default": "en"
           },
           "country": {
-            "type": ["string", "null"],
+            "type": "string",
             "description": "2-letter country code to filter articles by publication country (e.g., 'us', 'gb', 'ca')",
             "enum": [
               "au",
@@ -78,7 +78,7 @@
 
           "in": {
             "type": "string",
-            "description": "Attributes to search in: 'title', 'description', 'content', or comma-separated combinations",
+            "description": "Attributes to search in: 'title', 'description', 'content', or comma-separated combinations.",
             "default": "title,description"
           },
           "start_date": {
@@ -91,28 +91,20 @@
             "description": "Filter articles published before this date (format: YYYY-MM-DD)",
             "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
           },
-          "sortby": {
+          "sort_by": {
             "type": "string",
-            "description": "Sort articles by publication date or relevance",
+            "description": "Sort articles by publication date or relevance.",
             "enum": ["publishedAt", "relevance"],
             "default": "publishedAt"
           }
         },
-        "required": [
-          "query",
-          "language",
-          "country",
-          "in",
-          "start_date",
-          "end_date",
-          "sortby"
-        ]
+        "required": ["query", "country", "start_date", "end_date"]
       },
       "outputSchema": {
         "type": "object",
         "description": "Search results containing news articles",
         "properties": {
-          "totalArticles": {
+          "total_articles": {
             "type": "integer",
             "description": "Total number of articles found"
           },
@@ -172,7 +164,7 @@
             }
           }
         },
-        "required": ["totalArticles", "articles"]
+        "required": ["total_articles", "articles"]
       }
     },
     {
@@ -194,8 +186,7 @@
               "sports",
               "science",
               "health"
-            ],
-            "default": "general"
+            ]
           },
           "language": {
             "type": "string",
@@ -226,7 +217,7 @@
             "default": "en"
           },
           "country": {
-            "type": ["string", "null"],
+            "type": "string",
             "description": "2-letter country code to filter articles by publication country (e.g., 'us', 'gb', 'ca')",
             "enum": [
               "au",
@@ -276,20 +267,13 @@
             "maxLength": 500
           }
         },
-        "required": [
-          "category",
-          "language",
-          "country",
-          "start_date",
-          "end_date",
-          "query"
-        ]
+        "required": ["category", "country", "start_date", "end_date", "query"]
       },
       "outputSchema": {
         "type": "object",
         "description": "Top headlines response containing trending news articles",
         "properties": {
-          "totalArticles": {
+          "total_articles": {
             "type": "integer",
             "description": "Total number of articles found"
           },
@@ -310,6 +294,10 @@
                 "content": {
                   "type": ["string", "null"],
                   "description": "Full article content (if available)"
+                },
+                "language": {
+                  "type": "string",
+                  "description": "Language of the article"
                 },
                 "url": {
                   "type": "string",
@@ -334,22 +322,24 @@
                       "type": "string",
                       "description": "News source website URL"
                     }
-                  }
+                  },
+                  "required": ["name", "url"]
                 }
               },
               "required": [
                 "title",
                 "description",
                 "content",
+                "language",
                 "url",
                 "image",
                 "publishedAt",
                 "source"
               ]
             }
-          },
-          "required": ["totalArticles", "articles"]
-        }
+          }
+        },
+        "required": ["total_articles", "articles"]
       }
     }
   ]

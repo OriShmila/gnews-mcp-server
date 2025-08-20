@@ -85,8 +85,9 @@ async def make_gnews_request(endpoint: str, params: dict) -> dict:
             raise ValueError(f"Unexpected error: {e}")
 
 
-async def search_news(query: str, language: str = "en", country: str = None, 
-                     **kwargs) -> dict:
+async def search_news(
+    query: str, language: str = "en", country: str = None, **kwargs
+) -> dict:
     """
     Search for news articles using keywords with various filtering options.
 
@@ -105,9 +106,11 @@ async def search_news(query: str, language: str = "en", country: str = None,
     # Extract parameters with defaults and handle nulls
     max_articles = 10  # Fixed at 10 articles
     in_attr = kwargs.get("in", "title,description")
-    start_date = kwargs.get("start_date") if kwargs.get("start_date") is not None else None
+    start_date = (
+        kwargs.get("start_date") if kwargs.get("start_date") is not None else None
+    )
     end_date = kwargs.get("end_date") if kwargs.get("end_date") is not None else None
-    sortby = kwargs.get("sortby", "publishedAt")
+    sort_by = kwargs.get("sort_by", "publishedAt")
 
     # Validate required parameters
     if not query or not query.strip():
@@ -122,7 +125,7 @@ async def search_news(query: str, language: str = "en", country: str = None,
         api_end_date = validate_and_convert_date(end_date)
 
     # Validate sortby parameter
-    if sortby not in ["publishedAt", "relevance"]:
+    if not sort_by or sort_by not in ["publishedAt", "relevance"]:
         raise ValueError("'sortby' must be 'publishedAt' or 'relevance'")
 
     # Validate language code format
@@ -139,7 +142,7 @@ async def search_news(query: str, language: str = "en", country: str = None,
         "lang": language.lower(),  # API still expects 'lang' parameter
         "max": max_articles,
         "in": in_attr,
-        "sortby": sortby,
+        "sortby": sort_by,
     }
 
     # Add optional parameters
@@ -153,12 +156,38 @@ async def search_news(query: str, language: str = "en", country: str = None,
     # Make API request
     response = await make_gnews_request("search", params)
 
-    return response
+    # Normalize response to match our schema - ensure all required fields are present
+    normalized_articles = []
+    for article in response.get("articles", []):
+        normalized_article = {
+            "title": article.get("title"),
+            "description": article.get("description"),  # Can be None/null
+            "content": article.get("content"),  # Can be None/null
+            "url": article.get("url"),
+            "image": article.get("image"),  # Can be None/null
+            "publishedAt": article.get("publishedAt"),
+            "source": {
+                "name": article.get("source", {}).get("name"),
+                "url": article.get("source", {}).get("url"),
+            },
+        }
+        normalized_articles.append(normalized_article)
+
+    return {
+        "total_articles": response.get("totalArticles", len(normalized_articles)),
+        "articles": normalized_articles,
+    }
 
 
-async def get_top_headlines(category: str = "general", language: str = "en",
-                           country: str = None, start_date: str = None,
-                           end_date: str = None, query: str = None, **kwargs) -> dict:
+async def get_top_headlines(
+    category: str = "general",
+    language: str = "en",
+    country: str = None,
+    start_date: str = None,
+    end_date: str = None,
+    query: str = None,
+    **kwargs,
+) -> dict:
     """
     Get current trending news headlines based on Google News ranking.
 
@@ -227,7 +256,28 @@ async def get_top_headlines(category: str = "general", language: str = "en",
     # Make API request
     response = await make_gnews_request("top-headlines", params)
 
-    return response
+    # Normalize response to match our schema - ensure all required fields are present
+    normalized_articles = []
+    for article in response.get("articles", []):
+        normalized_article = {
+            "title": article.get("title"),
+            "description": article.get("description"),  # Can be None/null
+            "content": article.get("content"),  # Can be None/null
+            "url": article.get("url"),
+            "image": article.get("image"),  # Can be None/null
+            "publishedAt": article.get("publishedAt"),
+            "language": article.get("lang"),
+            "source": {
+                "name": article.get("source", {}).get("name"),
+                "url": article.get("source", {}).get("url"),
+            },
+        }
+        normalized_articles.append(normalized_article)
+
+    return {
+        "total_articles": response.get("totalArticles", len(normalized_articles)),
+        "articles": normalized_articles,
+    }
 
 
 # Tool function mapping

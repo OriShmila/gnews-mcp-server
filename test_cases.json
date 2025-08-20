@@ -4,33 +4,15 @@
       "name": "search_news_basic",
       "tool": "search_news",
       "arguments": {
-        "query": "artificial intelligence"
+        "query": "artificial intelligence",
+        "country": "us",
+        "in": "title,description",
+        "start_date": null,
+        "end_date": null,
+        "sort_by": "publishedAt"
       },
       "description": "Basic news search with simple query",
-      "expected_fields": ["totalArticles", "articles"],
-      "should_succeed": true
-    },
-    {
-      "name": "search_news_with_language",
-      "tool": "search_news",
-      "arguments": {
-        "query": "technology",
-        "language": "en"
-      },
-      "description": "Search news with language filter",
-      "expected_fields": ["totalArticles", "articles"],
-      "should_succeed": true
-    },
-    {
-      "name": "search_news_with_country",
-      "tool": "search_news",
-      "arguments": {
-        "query": "politics",
-        "language": "en",
-        "country": "us"
-      },
-      "description": "Search news with country filter",
-      "expected_fields": ["totalArticles", "articles"],
+      "expected_fields": ["total_articles", "articles"],
       "should_succeed": true
     },
     {
@@ -38,10 +20,14 @@
       "tool": "search_news",
       "arguments": {
         "query": "climate change",
-        "sortby": "relevance"
+        "language": "en",
+        "country": "us",
+        "in": "title",
+        "start_date": null,
+        "end_date": null
       },
       "description": "Search news sorted by relevance",
-      "expected_fields": ["totalArticles", "articles"],
+      "expected_fields": ["total_articles", "articles"],
       "should_succeed": true
     },
     {
@@ -49,49 +35,74 @@
       "tool": "search_news",
       "arguments": {
         "query": "sports",
+        "language": "en",
+        "country": "us",
         "start_date": "2024-01-01",
-        "end_date": "2024-12-31"
+        "end_date": "2024-12-31",
+        "sort_by": "relevance"
       },
       "description": "Search news with date range filter",
-      "expected_fields": ["totalArticles", "articles"],
+      "expected_fields": ["total_articles", "articles"],
       "should_succeed": true
     },
     {
       "name": "search_news_phrase_query",
       "tool": "search_news",
       "arguments": {
-        "query": "\"machine learning\""
+        "query": "\"machine learning\"",
+        "language": "en",
+        "country": "gb",
+        "start_date": null,
+        "end_date": null,
+        "sort_by": "relevance"
       },
       "description": "Search with exact phrase matching",
-      "expected_fields": ["totalArticles", "articles"],
+      "expected_fields": ["total_articles", "articles"],
       "should_succeed": true
     },
     {
       "name": "search_news_logical_operators",
       "tool": "search_news",
       "arguments": {
-        "query": "Apple AND iPhone OR Android"
+        "query": "Apple AND iPhone OR Android",
+        "language": "en",
+        "country": "us",
+        "start_date": null,
+        "end_date": null,
+        "sort_by": "relevance"
       },
       "description": "Search using logical AND/OR operators",
-      "expected_fields": ["totalArticles", "articles"],
+      "expected_fields": ["total_articles", "articles"],
       "should_succeed": true
     },
     {
       "name": "get_top_headlines_default",
       "tool": "get_top_headlines",
-      "arguments": {},
+      "arguments": {
+        "category": "general",
+        "language": "en",
+        "country": "us",
+        "start_date": null,
+        "end_date": null,
+        "query": null
+      },
       "description": "Get top headlines with default parameters",
-      "expected_fields": ["totalArticles", "articles"],
+      "expected_fields": ["total_articles", "articles"],
       "should_succeed": true
     },
     {
       "name": "get_top_headlines_technology",
       "tool": "get_top_headlines",
       "arguments": {
-        "category": "technology"
+        "category": "technology",
+        "language": "en",
+        "country": "us",
+        "start_date": null,
+        "end_date": null,
+        "query": null
       },
       "description": "Get technology headlines",
-      "expected_fields": ["totalArticles", "articles"],
+      "expected_fields": ["total_articles", "articles"],
       "should_succeed": true
     },
     {
@@ -100,10 +111,13 @@
       "arguments": {
         "category": "business",
         "language": "en",
-        "country": "us"
+        "country": "us",
+        "start_date": null,
+        "end_date": null,
+        "query": null
       },
       "description": "Get business headlines for US in English",
-      "expected_fields": ["totalArticles", "articles"],
+      "expected_fields": ["total_articles", "articles"],
       "should_succeed": true
     },
     {
@@ -111,10 +125,14 @@
       "tool": "get_top_headlines",
       "arguments": {
         "category": "sports",
-        "language": "en"
+        "language": "en",
+        "country": "us",
+        "start_date": null,
+        "end_date": null,
+        "query": null
       },
       "description": "Get sports headlines",
-      "expected_fields": ["totalArticles", "articles"],
+      "expected_fields": ["total_articles", "articles"],
       "should_succeed": true
     },
     {
@@ -122,10 +140,14 @@
       "tool": "get_top_headlines",
       "arguments": {
         "category": "health",
-        "country": "gb"
+        "language": "en",
+        "country": "gb",
+        "start_date": null,
+        "end_date": null,
+        "query": null
       },
       "description": "Get health headlines from UK",
-      "expected_fields": ["totalArticles", "articles"],
+      "expected_fields": ["total_articles", "articles"],
       "should_succeed": true
     },
     {
@@ -133,17 +155,26 @@
       "tool": "get_top_headlines",
       "arguments": {
         "category": "general",
+        "language": "en",
+        "country": "us",
+        "start_date": null,
+        "end_date": null,
         "query": "weather"
       },
       "description": "Get general headlines filtered by search term",
-      "expected_fields": ["totalArticles", "articles"],
+      "expected_fields": ["total_articles", "articles"],
       "should_succeed": true
     },
     {
       "name": "search_news_empty_query",
       "tool": "search_news",
       "arguments": {
-        "query": ""
+        "query": "",
+        "language": "en",
+        "country": "us",
+        "start_date": null,
+        "end_date": null,
+        "sort_by": "relevance"
       },
       "description": "Test search with empty query",
       "expected_fields": [],
@@ -153,7 +184,12 @@
       "name": "search_news_whitespace_query",
       "tool": "search_news",
       "arguments": {
-        "query": "   "
+        "query": "   ",
+        "language": "en",
+        "country": "us",
+        "start_date": null,
+        "end_date": null,
+        "sort_by": "relevance"
       },
       "description": "Test search with whitespace-only query",
       "expected_fields": [],
@@ -164,7 +200,11 @@
       "tool": "search_news",
       "arguments": {
         "query": "news",
-        "language": "english"
+        "language": "english",
+        "country": "us",
+        "start_date": null,
+        "end_date": null,
+        "sort_by": "relevance"
       },
       "description": "Test search with invalid language code format",
       "expected_fields": [],
@@ -175,7 +215,11 @@
       "tool": "search_news",
       "arguments": {
         "query": "news",
-        "country": "usa"
+        "language": "en",
+        "country": "usa",
+        "start_date": null,
+        "end_date": null,
+        "sort_by": "relevance"
       },
       "description": "Test search with invalid country code format",
       "expected_fields": [],
@@ -186,9 +230,13 @@
       "tool": "search_news",
       "arguments": {
         "query": "news",
-        "sortby": "popularity"
+        "language": "en",
+        "country": "us",
+        "start_date": null,
+        "end_date": null,
+        "sort_by": "popularity"
       },
-      "description": "Test search with invalid sortby value",
+      "description": "Test search with invalid sort_by value",
       "expected_fields": [],
       "should_succeed": false
     },
@@ -197,7 +245,11 @@
       "tool": "search_news",
       "arguments": {
         "query": "news",
-        "start_date": "invalid-date-format"
+        "language": "en",
+        "country": "us",
+        "start_date": "invalid-date-format",
+        "end_date": null,
+        "sort_by": "relevance"
       },
       "description": "Test search with invalid date format",
       "expected_fields": [],
@@ -207,7 +259,11 @@
       "name": "get_top_headlines_invalid_category",
       "tool": "get_top_headlines",
       "arguments": {
-        "category": "lifestyle"
+        "category": "lifestyle",
+        "country": "us",
+        "start_date": null,
+        "end_date": null,
+        "query": null
       },
       "description": "Test headlines with invalid category",
       "expected_fields": [],
@@ -218,7 +274,11 @@
       "tool": "get_top_headlines",
       "arguments": {
         "category": "general",
-        "language": "eng"
+        "language": "eng",
+        "country": "us",
+        "start_date": null,
+        "end_date": null,
+        "query": null
       },
       "description": "Test headlines with invalid language code",
       "expected_fields": [],
@@ -229,7 +289,11 @@
       "tool": "get_top_headlines",
       "arguments": {
         "category": "general",
-        "country": "united_states"
+        "language": "en",
+        "country": "united_states",
+        "start_date": null,
+        "end_date": null,
+        "query": null
       },
       "description": "Test headlines with invalid country code format",
       "expected_fields": [],
