@@ -1,6 +1,6 @@
 [project]
 name = "gnews-mcp-server"
-version = "0.1.0"
+version = "1.0.0"
 description = "GNews API MCP server for fetching news articles and headlines"
 readme = "README.md"
 requires-python = ">=3.11"
